@@ -20,13 +20,8 @@ Even small shops run time-tracking on an index card, a spreadsheet, and a group 
 
 The original pitch was broader (maintenance + machinery + live feeds); after review the team scoped the project down to the clock-in / clock-out slice.
 
-## 2. Scope Note
 
-- Everything in this repo is **time-tracking only**. No telemetry, no cameras, no maintenance tickets.
-- Shift scheduling is in-scope because clock-in only makes sense against something to clock in to.
-- Demo data is simulated. The simulator posts fake clock-in events on a cadence so the live roster view has something to show during the demo.
-
-## 3. Stack
+## 2. Stack
 
 | Layer | Tech |
 |---|---|
@@ -38,7 +33,7 @@ The original pitch was broader (maintenance + machinery + live feeds); after rev
 | Simulator | Node worker that generates demo clock-in/out events |
 | Dev / CI | Docker Compose, GitHub Actions, ESLint + Prettier, Vitest + Supertest |
 
-## 4. Architecture at a Glance
+## 3. Architecture at a Glance
 
 ```
 ┌──────────────────┐     HTTPS/REST + WebSocket    ┌────────────────────┐
@@ -55,7 +50,7 @@ The original pitch was broader (maintenance + machinery + live feeds); after rev
 
 Full component / class / sequence / ER diagrams live in [`docs/uml/`](./docs/uml). Rendered inline on GitHub via Mermaid. Full feature matrix in [`docs/FEATURES.md`](./docs/FEATURES.md).
 
-## 5. UML Index
+## 4. UML Index
 
 **Structural**
 - Architecture — [`docs/uml/architecture.md`](./docs/uml/architecture.md)
@@ -77,7 +72,7 @@ Full component / class / sequence / ER diagrams live in [`docs/uml/`](./docs/uml
 - Shift lifecycle — [`docs/uml/activity-shift.md`](./docs/uml/activity-shift.md)
 - Schedule generator pipeline — [`docs/uml/activity-scheduling.md`](./docs/uml/activity-scheduling.md)
 
-## 6. Repository Layout
+## 5. Repository Layout
 
 ```
 .
@@ -107,7 +102,7 @@ Full component / class / sequence / ER diagrams live in [`docs/uml/`](./docs/uml
 └── README.md
 ```
 
-## 7. Data Model (short form)
+## 6. Data Model (short form)
 
 | Table | Purpose |
 |---|---|
@@ -126,7 +121,7 @@ Full ER diagram: [`docs/uml/er-diagram.md`](./docs/uml/er-diagram.md).
 
 > **Planned vs. actual.** `scheduled_shifts` is the schedule a manager publishes; `shifts` is what actually happened on the floor. Clock-in resolves a worker to a `scheduled_shift` when one exists for that window, which is how late / early / missed can be flagged.
 
-## 8. API Surface (selected)
+## 7. API Surface (selected)
 
 | Method | Path | Notes |
 |---|---|---|
@@ -160,7 +155,7 @@ Full ER diagram: [`docs/uml/er-diagram.md`](./docs/uml/er-diagram.md).
 | `user:<id>` | swap incoming / approved / denied, time-off decision | logged-in worker |
 | `role:supervisor` | swaps + time-off requests pending supervisor approval | supervisor queue |
 
-## 9. Running Locally
+## 8. Running Locally
 
 ### Prerequisites
 Docker + Docker Compose, Node 20, pnpm.
@@ -189,7 +184,7 @@ Open:
 
 (Dev-only; the seed script refuses to run with `NODE_ENV=production`.)
 
-## 10. Testing
+## 9. Testing
 
 ```bash
 pnpm --filter api test            # unit + supertest integration
@@ -199,10 +194,10 @@ pnpm lint
 
 CI runs the same three on every push to `main` and on pull requests.
 
-## 11. Team
+## 10. Team
 
 CIS 375, Fall 2026 — University of Michigan–Dearborn.
 
-## 12. License
+## 11. License
 
 MIT. See [`LICENSE`](./LICENSE).
