@@ -240,7 +240,7 @@ Found while cross-referencing the README, `FEATURES.md`, and `docs/uml/`. The re
 
 | Issue | Where | Resolution |
 |---|---|---|
-| A weekly hour cap is required (F 3.2, swap guard) but no table or column stores it. | `schema.md` | Added to the Worker data dictionary entry; the schema needs a column. |
+| A weekly hour cap is required (F 3.2, swap guard) but no table or column stores it. | README data model | Added to the Worker data dictionary entry; the schema needs a column. |
 | `shift_events` and `swap_events` audit tables are referenced but not in the schema. | `FEATURES.md` 1.9, old state diagrams | Audit is v1 (F 1.9); tables must be added before then. |
 | Swap staleness referred to `generation_run_id`; the column is `schedule_run_id`. | old `state-swap-request.md` | Fixed. |
 | Swap approval broadcast to room `tickets:schedule`; the room is `schedule`. | old `seq-swap-request.md` | Fixed. |
