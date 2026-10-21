@@ -1,0 +1,32 @@
+@startuml state-swap-request
+!include style.iuml
+hide empty description
+
+state AwaitingCounterpart : entry / notify counterpart
+state AwaitingSupervisor : entry / add to supervisor queue
+state Approved : entry / reassign both slots
+state Approved : entry / notify both workers
+state Declined : entry / notify requester
+state Denied : entry / notify both workers
+state Canceled : entry / notify other party
+state Stale : entry / notify both workers
+
+[*] --> AwaitingCounterpart : openSwap [both slots owned and unlocked]
+
+AwaitingCounterpart --> AwaitingSupervisor : accept [same week and not yet started]
+AwaitingCounterpart --> Declined : decline
+AwaitingCounterpart --> Canceled : cancel [by requester]
+AwaitingCounterpart --> Stale : scheduleChanged [a slot was edited or locked]
+
+AwaitingSupervisor --> Approved : approve [neither worker exceeds weekly hour cap]
+AwaitingSupervisor --> Denied : deny
+AwaitingSupervisor --> Denied : approve [a worker would exceed weekly hour cap]
+AwaitingSupervisor --> Canceled : cancel [by either worker]
+AwaitingSupervisor --> Stale : scheduleChanged [a slot was edited or locked]
+
+Approved --> [*]
+Declined --> [*]
+Denied --> [*]
+Canceled --> [*]
+Stale --> [*]
+@enduml

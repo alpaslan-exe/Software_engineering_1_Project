@@ -1,0 +1,30 @@
+@startuml activity-scheduling
+!include style.iuml
+
+partition "Generate Weekly Schedule" {
+  start
+  repeat
+    :Load demand template, worker availability,
+    hour caps and approved time-off;
+  repeat while (Inputs complete?) is ([no]) not ([yes])
+  :Create schedule run (state = pending);
+  :Fill demand slots greedily, station by hour;
+  :Repair conflicts (double-booking, hour caps);
+  :Compute coverage % and unfilled slots;
+  repeat
+    :Manager reviews preview;
+    if (Changes needed?) then ([yes])
+      :Adjust assignments in editor;
+      :Recompute coverage;
+    else ([no])
+    endif
+  repeat while (Manager approves?) is ([no]) not ([yes])
+  :Lock run and publish scheduled shifts;
+  fork
+    :Email affected workers;
+  fork again
+    :Update schedule views;
+  end fork
+  stop
+}
+@enduml

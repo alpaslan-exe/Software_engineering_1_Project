@@ -1,0 +1,44 @@
+@startuml activity-shift
+!include style.iuml
+
+partition "Work a Shift" {
+  start
+  :Tap badge at kiosk;
+  if (Badge valid?) then ([no])
+    :Show "Unknown badge";
+    stop
+  else ([yes])
+  endif
+  if (Already clocked in?) then ([yes])
+    :Show "Already on shift";
+    stop
+  else ([no])
+  endif
+  if (Scheduled shift now?) then ([yes])
+    :Link to scheduled shift;
+  else ([no])
+    :Flag as walk-in;
+  endif
+  :Create open shift;
+  fork
+    :Update live roster;
+  fork again
+    :Show welcome and minutes late;
+  end fork
+  repeat
+    :Work at station;
+  repeat while (Supervisor reassigns station?) is ([yes])
+  ->[no];
+  if (How does the shift end?) then ([worker taps badge])
+    :Record clock-out;
+  elseif () then ([supervisor forces clock-out])
+    :Record clock-out with reason;
+  else ([no clock-out after 16 h])
+    :Set clock-out = clock-in + 8 h;
+    :Flag for payroll review;
+  endif
+  :Compute duration and lateness;
+  :Update live roster;
+  stop
+}
+@enduml

@@ -1,24 +1,14 @@
-# State Machine — Shift
+# State Machine Diagram — Shift
 
-A `shifts` row is created `OPEN` on clock-in. The only legal terminal state is `CLOSED`. Rows older than 16 h with no clock-out are closed by a nightly reaper and tagged `auto_closed` in the audit event stream so payroll can review them.
+States of one `Shift` from clock-in to clock-out. Transitions are labelled `event [guard] / action`. States list their `entry`, `do` and `exit` behaviour.
 
-```mermaid
-stateDiagram-v2
-    [*] --> OPEN : POST /shifts/clock-in
-    OPEN --> CLOSED : POST /shifts/clock-out
-    OPEN --> AUTO_CLOSED : nightly reaper<br/>(> 16 h open)
-    CLOSED --> [*]
-    AUTO_CLOSED --> [*]
-
-    note right of AUTO_CLOSED
-        clock_out = clock_in + 8 h (default shift length)
-        audited: ticket_events-style row in shift_events
-        payroll must review before approval
-    end note
-```
+![Shift state machine](./img/state-shift.png)
 
 ## Invariants
 
-- At most one `OPEN` shift per `worker_id` at any time. Enforced by a partial unique index: `CREATE UNIQUE INDEX one_open_shift ON shifts (worker_id) WHERE clock_out IS NULL;`
-- `clock_out ≥ clock_in` enforced by a `CHECK` constraint.
-- Reassigning a worker to another station mid-shift is modeled as `CLOSED` on station A + fresh `OPEN` on station B, not a mutation of the open row.
+- At most one **Open** shift per worker at any time.
+- Clock-out time is never earlier than clock-in time.
+- Moving a worker to another station closes the current shift and opens a new one at the new station. The open shift is never edited in place.
+- **AutoClosed** is recorded as `closeReason = "auto_closed"`. The schema has no separate state column: an open shift is one whose clock-out is empty.
+
+_Source: [`src/state-shift.puml`](./src/state-shift.puml)_

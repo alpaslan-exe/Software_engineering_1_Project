@@ -1,0 +1,74 @@
+@startuml seq-swap-request
+!include style.iuml
+skinparam style strictuml
+skinparam sequenceMessageAlign center
+autonumber
+
+actor ":Worker A" as A
+actor ":Worker B" as B
+actor ":Supervisor" as S
+boundary ":SwapInbox" as UI
+boundary ":SupervisorQueue" as Q
+control ":SwapManager" as C
+entity "from: ScheduledShift" as F
+entity "to: ScheduledShift" as T
+entity ":SwapRequest" as SR
+entity "w: Worker" as WK
+
+A -> UI : selectSlots(fromSlot, toSlot)
+activate UI
+UI -> C : openSwap(fromSlot, toSlot)
+activate C
+C -> F : isOwnedBy(A)
+C -> T : isOwnedBy(B)
+C -> F : isLocked()
+C -> T : isLocked()
+
+alt ownership fails or a slot is locked
+  C --> UI : rejected
+  UI --> A : showError(reason)
+else else
+  C -> SR ** : create(fromSlot, toSlot)
+  C --> UI : swapRequest
+  UI --> B : showIncoming(swapRequest)
+  deactivate C
+
+  B -> UI : respond(swapRequest, decision)
+  UI -> C : counterpartDecide(swapRequest, decision)
+  activate C
+  alt decision == decline
+    C -> SR : decline()
+    C --> UI : declined
+    UI --> A : showDeclined()
+  else decision == accept
+    C -> SR : accept()
+    C -> Q : addPending(swapRequest)
+    activate Q
+    deactivate C
+
+    S -> Q : decide(swapRequest, decision)
+    Q -> C : supervisorDecide(swapRequest, decision)
+    activate C
+    loop for each of A, B
+      C -> WK : weeklyHours(weekStart)
+    end
+    alt decision == deny or a worker would exceed the hour cap
+      C -> SR : deny()
+      C --> UI : denied
+      UI --> A : showDenied()
+      UI --> B : showDenied()
+    else decision == approve
+      C -> F : assignTo(B)
+      C -> T : assignTo(A)
+      C -> SR : approve()
+      C --> UI : approved
+      UI --> A : showApproved()
+      UI --> B : showApproved()
+    end
+    C --> Q : done
+    deactivate C
+    deactivate Q
+  end
+end
+deactivate UI
+@enduml

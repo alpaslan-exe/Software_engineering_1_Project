@@ -1,0 +1,133 @@
+@startuml class-diagram
+!include style.iuml
+skinparam nodesep 70
+skinparam ranksep 80
+
+class UserAccount {
+  username: String
+  role: Role
+  verifyPassword(password: String): Boolean
+}
+
+enum Role <<enumeration>> {
+  MANAGER
+  SUPERVISOR
+  WORKER
+}
+
+class Worker {
+  firstName: String
+  lastName: String
+  badgeId: String
+  active: Boolean
+  findByBadge(badgeId: String): Worker
+  hasOpenShift(): Boolean
+  weeklyHours(weekStart: Date): Integer
+}
+
+class Station {
+  code: String
+  name: String
+  zone: String
+}
+
+class Shift {
+  clockIn: DateTime
+  clockOut: DateTime
+  closeReason: String
+  create(worker: Worker, station: Station, slot: ScheduledShift, at: DateTime): Shift
+  close(at: DateTime, reason: String)
+  durationMinutes(): Integer
+  latenessMinutes(): Integer
+  isWalkIn(): Boolean
+}
+
+class ScheduledShift {
+  startsAt: DateTime
+  endsAt: DateTime
+  state: SlotState
+  findCurrent(worker: Worker, station: Station, at: DateTime): ScheduledShift
+  isOwnedBy(worker: Worker): Boolean
+  isLocked(): Boolean
+  assignTo(worker: Worker)
+  claim(worker: Worker)
+}
+
+class DemandTemplate {
+  name: String
+  effectiveFrom: Date
+  effectiveTo: Date
+}
+
+class DemandSlot {
+  dayOfWeek: Integer
+  startsAt: Time
+  endsAt: Time
+  headCount: Integer
+}
+
+class Availability {
+  dayOfWeek: Integer
+  startsAt: Time
+  endsAt: Time
+  preference: Preference
+}
+
+class TimeOffRequest {
+  startsOn: Date
+  endsOn: Date
+  reason: String
+  state: RequestState
+  approve()
+  deny()
+}
+
+class ScheduleRun {
+  weekStart: Date
+  inputsHash: String
+  state: RunState
+  coveragePct: Real
+  unfilledCount: Integer
+  generate()
+  preview(): CoverageReport
+  publish()
+}
+
+class SwapRequest {
+  state: SwapState
+  createdAt: DateTime
+  decidedAt: DateTime
+  create(fromSlot: ScheduledShift, toSlot: ScheduledShift): SwapRequest
+  accept()
+  decline()
+  approve()
+  deny()
+  cancel()
+  markStale()
+}
+
+UserAccount -[hidden]right- Role
+UserAccount "1" -- "0..1" Worker : logs in as >
+
+Worker "1" -- "*" Shift : works >
+Station "1" -- "*" Shift : hosts >
+ScheduledShift "0..1" -- "0..1" Shift : realized by >
+
+Worker "0..1" -- "*" ScheduledShift : assigned to <
+Station "1" -- "*" ScheduledShift : staffs <
+ScheduleRun "1" -- "*" ScheduledShift : produces >
+ScheduledShift "0..1" -- "*" ScheduledShift : supersedes >
+
+DemandTemplate "1" *-- "1..*" DemandSlot
+Station "1" -- "*" DemandSlot : needed at <
+DemandTemplate "1" -- "*" ScheduleRun : drives >
+
+Worker "1" *-- "*" Availability
+Worker "1" -- "*" TimeOffRequest : submits >
+UserAccount "0..1" -- "*" TimeOffRequest : decides >
+
+SwapRequest "*" -- "1" ScheduledShift : offers >
+SwapRequest "*" -- "1" ScheduledShift : wants >
+UserAccount "1" -- "*" SwapRequest : requests >
+UserAccount "0..1" -- "*" SwapRequest : approves >
+@enduml

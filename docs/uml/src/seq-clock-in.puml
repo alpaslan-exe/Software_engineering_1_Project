@@ -1,0 +1,49 @@
+@startuml seq-clock-in
+!include style.iuml
+skinparam style strictuml
+skinparam sequenceMessageAlign center
+autonumber
+
+actor ":Worker" as W
+boundary ":ClockKiosk" as K
+control ":ClockManager" as C
+entity "w: Worker" as WR
+entity ":ScheduledShift" as SS
+entity ":Shift" as SH
+boundary ":RosterScreen" as R
+
+W -> K : tapBadge(badgeId)
+activate K
+K -> C : clockIn(badgeId, stationId)
+activate C
+C -> WR : findByBadge(badgeId)
+activate WR
+WR --> C : worker
+deactivate WR
+C -> WR : hasOpenShift()
+
+alt worker not found
+  C --> K : unknownBadge
+  K --> W : showError("Unknown badge")
+else worker.hasOpenShift()
+  C --> K : alreadyOnShift
+  K --> W : showError("Already clocked in")
+else else
+  C -> SS : findCurrent(worker, station, now)
+  activate SS
+  SS --> C : slot
+  deactivate SS
+  C -> SH ** : create(worker, station, slot, now)
+  activate SH
+  SH --> C : shift
+  deactivate SH
+  opt slot == null
+    note over C, SH : shift.isWalkIn() is true;\nflagged for the attendance report
+  end
+  C -> R : refreshRoster(station)
+  C --> K : shift, minutesLate
+  K --> W : showWelcome(name, minutesLate)
+end
+deactivate C
+deactivate K
+@enduml

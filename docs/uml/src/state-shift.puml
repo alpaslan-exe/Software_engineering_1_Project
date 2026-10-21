@@ -1,0 +1,21 @@
+@startuml state-shift
+!include style.iuml
+hide empty description
+
+state Open : entry / record clock-in time and station
+state Open : do / accrue worked minutes
+
+state Closed : entry / compute duration and lateness
+state Closed : entry / update live roster
+
+state AutoClosed : entry / set clock-out = clock-in + 8 h
+state AutoClosed : entry / flag for payroll review
+
+[*] --> Open : badgeTapped [no open shift] / create shift
+Open --> Closed : badgeTapped / record clock-out time
+Open --> Closed : forceClockOut(reason) / record clock-out time and reason
+Open --> Closed : stationReassigned / record clock-out time; open shift at new station
+Open --> AutoClosed : nightlyCheck [open > 16 h] / closeReason = "auto_closed"
+Closed --> [*]
+AutoClosed --> [*] : payrollReviewed
+@enduml

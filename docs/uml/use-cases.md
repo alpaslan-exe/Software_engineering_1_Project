@@ -1,55 +1,55 @@
-# Use Cases
+# Use Case Diagram
 
-Three human actors (plus a simulator for demos). Mermaid has no dedicated use-case shape; the diagram is drawn with a flowchart grouped by the system boundary.
+Three human actors share an abstract **Employee** actor, which owns **UC-01 Log In**. The **Email System** is a secondary actor that receives schedule notifications. The use case IDs (UC-01 … UC-20) are stable, so requirements and test cases can trace to them.
 
-```mermaid
-flowchart LR
-    Manager((Manager))
-    Supervisor((Supervisor))
-    Worker((Worker))
-    Sim((Simulator<br/>dev only))
+![Use case diagram](./img/use-cases.png)
 
-    subgraph Sys["ShiftDeck"]
-        UC1[View live roster]
-        UC2[Clock in / out]
-        UC3[View my schedule]
-        UC4[Claim open shift]
-        UC5[Request swap]
-        UC6[Approve swap<br/>counterpart]
-        UC7[Approve swap<br/>supervisor]
-        UC8[Request time-off]
-        UC9[Decide time-off]
-        UC10[Edit demand template]
-        UC11[Set availability]
-        UC12[Generate weekly schedule]
-        UC13[Publish schedule]
-        UC14[Export timesheet CSV]
-        UC15[Force clock-out]
-    end
+## Use case index
 
-    Worker --> UC2
-    Worker --> UC3
-    Worker --> UC4
-    Worker --> UC5
-    Worker --> UC6
-    Worker --> UC8
-    Worker --> UC11
-    Supervisor --> UC1
-    Supervisor --> UC7
-    Supervisor --> UC9
-    Supervisor --> UC15
-    Manager --> UC1
-    Manager --> UC10
-    Manager --> UC12
-    Manager --> UC13
-    Manager --> UC14
-    Sim --> UC2
-```
+| ID | Use case | Primary actor | FEATURES # |
+|---|---|---|---|
+| UC-01 | Log In | Employee | 5.1, 5.2 |
+| UC-02 | Clock In | Worker | 1.1, 1.3, 1.5 |
+| UC-03 | Clock Out | Worker | 1.2 |
+| UC-04 | Verify Badge | (included) | 1.1 |
+| UC-05 | Record Walk-In | (extends UC-02) | 1.5 |
+| UC-06 | View My Schedule | Worker | 2.1 |
+| UC-07 | Claim Open Shift | Worker | 2.2 |
+| UC-08 | Request Shift Swap | Worker | 2.3 |
+| UC-09 | Respond to Swap Request | Worker | 2.3 |
+| UC-10 | Approve Swap Request | Supervisor | 2.3 |
+| UC-11 | Request Time Off | Worker | 2.5 |
+| UC-12 | Decide Time-Off Request | Supervisor | 2.5 |
+| UC-13 | Set Availability | Worker | 2.6, 3.2 |
+| UC-14 | View Live Roster | Supervisor, Manager | 4.1, 4.2 |
+| UC-15 | Force Clock-Out | Supervisor | 1.4 |
+| UC-16 | Edit Demand Template | Manager | 3.1 |
+| UC-17 | Generate Weekly Schedule | Manager | 3.3 |
+| UC-18 | Adjust Schedule Draft | (extends UC-17) | 3.5 |
+| UC-19 | Publish Schedule | Manager | 3.4 |
+| UC-20 | Export Timesheet | Manager | 4.4 |
+| UC-21 | View Timesheet | Supervisor, Manager | 4.3 |
+| UC-22 | Manage User Accounts | Manager | 5.3 |
+| UC-23 | Set Hour Caps | Manager | 3.2 |
+
+## Associations
+
+| Relationship | Meaning |
+|---|---|
+| UC-02 Clock In `<<include>>` UC-04 Verify Badge | Every clock-in validates the badge first. |
+| UC-03 Clock Out `<<include>>` UC-04 Verify Badge | Every clock-out validates the badge first. |
+| UC-05 Record Walk-In `<<extend>>` UC-02 Clock In | Exceptional case: no scheduled shift matches the clock-in. |
+| UC-18 Adjust Schedule Draft `<<extend>>` UC-17 Generate Weekly Schedule | Optional: the manager hand-edits the generated draft before publishing. |
+| Worker, Supervisor, Manager → Employee | Actor generalization: all three can log in. |
 
 ## Primary flows
 
-- **Clock-in (Worker).** Worker taps their badge; API opens a `shifts` row, matches it to the next `scheduled_shifts` row for that worker/station, hub broadcasts the roster change.
-- **Clock-out (Worker).** Taps again; API closes the row with duration + late/early flags.
-- **Swap (Worker → Worker → Supervisor).** A opens a request against B's slot. B accepts. Supervisor approves. Slots are atomically re-assigned.
-- **Schedule build (Manager).** Build or edit demand template → kick off a run → review coverage → publish. Workers are notified of their new schedule.
-- **Timesheet export (Manager).** Pick date range + worker set → download CSV for payroll.
+- **Clock in (Worker).** The worker taps their badge. The system opens a shift, links it to the matching scheduled shift (or records a walk-in), and updates the live roster.
+- **Clock out (Worker).** The worker taps again. The system closes the shift and computes duration and lateness.
+- **Swap (Worker A → Worker B → Supervisor).** A requests B's slot, B accepts, and a supervisor approves. Both slots are reassigned together.
+- **Schedule build (Manager).** Edit the demand template, generate a run, review coverage, adjust if needed, then publish. Affected workers are emailed.
+- **Timesheet export (Manager).** Pick a date range and set of workers, then download a CSV for payroll.
+
+The demo simulator is not an actor. It is a development tool, not an external user of the system.
+
+_Source: [`src/use-cases.puml`](./src/use-cases.puml)_

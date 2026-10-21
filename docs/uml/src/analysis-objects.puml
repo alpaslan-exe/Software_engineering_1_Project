@@ -1,0 +1,44 @@
+@startuml analysis-objects
+!include style.iuml
+left to right direction
+
+package "Boundary objects" {
+  boundary "ClockKiosk\n\ntapBadge(badgeId)\nshowError(message)\nshowWelcome(name, minutesLate)" as ClockKiosk
+  boundary "RosterScreen\n\nrefreshRoster(station)" as RosterScreen
+  boundary "SwapInbox\n\nselectSlots(fromSlot, toSlot)\nrespond(swap, decision)\nshowIncoming(swap)\nshowDeclined()\nshowDenied()\nshowApproved()\nshowError(reason)" as SwapInbox
+  boundary "SupervisorQueue\n\naddPending(swap)\ndecide(swap, decision)" as SupervisorQueue
+  boundary "ScheduleBuilder\n\nshowPreview(run)\nadjustAssignment(slot, worker)" as ScheduleBuilder
+}
+
+package "Control objects" {
+  control "ClockManager\n\nclockIn(badgeId, stationId)\nclockOut(badgeId)\nforceClockOut(shift, reason)" as ClockManager
+  control "SwapManager\n\nopenSwap(fromSlot, toSlot)\ncounterpartDecide(swap, decision)\nsupervisorDecide(swap, decision)" as SwapManager
+  control "ScheduleManager\n\ngenerate(template, weekStart)\npublish(run)" as ScheduleManager
+}
+
+package "Entity objects" {
+  entity Worker
+  entity Station
+  entity Shift
+  entity ScheduledShift
+  entity SwapRequest
+  entity ScheduleRun
+  entity DemandTemplate
+  entity TimeOffRequest
+}
+
+ClockKiosk ..> ClockManager
+RosterScreen <.. ClockManager
+SwapInbox ..> SwapManager
+SupervisorQueue ..> SwapManager
+ScheduleBuilder ..> ScheduleManager
+
+ClockManager ..> Worker
+ClockManager ..> Shift
+ClockManager ..> ScheduledShift
+SwapManager ..> SwapRequest
+SwapManager ..> ScheduledShift
+ScheduleManager ..> ScheduleRun
+ScheduleManager ..> DemandTemplate
+ScheduleManager ..> TimeOffRequest
+@enduml
