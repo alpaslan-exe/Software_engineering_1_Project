@@ -48,29 +48,26 @@ The original pitch was broader (maintenance + machinery + live feeds); after rev
 └──────────────────┘                               └────────────────────┘
 ```
 
-Full component / class / sequence / ER diagrams live in [`docs/uml/`](./docs/uml). Rendered inline on GitHub via Mermaid. Full feature matrix in [`docs/FEATURES.md`](./docs/FEATURES.md).
+Full UML set lives in [`docs/uml/`](./docs/uml): analysis diagrams in the CIS 375 course notation (PlantUML, rendered to PNG) and design diagrams in Mermaid. Full feature matrix in [`docs/FEATURES.md`](./docs/FEATURES.md). Requirements specification in [`docs/REQUIREMENTS.md`](./docs/REQUIREMENTS.md).
 
 ## 4. UML Index
 
-**Structural**
-- Architecture — [`docs/uml/architecture.md`](./docs/uml/architecture.md)
-- Deployment — [`docs/uml/deployment.md`](./docs/uml/deployment.md)
-- Domain class diagram — [`docs/uml/class-diagram.md`](./docs/uml/class-diagram.md)
-- ER diagram — [`docs/uml/er-diagram.md`](./docs/uml/er-diagram.md)
-- Full schema (columns + constraints + indexes) — [`docs/uml/schema.md`](./docs/uml/schema.md)
-
-**Behavioral**
+**Analysis (CIS 375 course notation, PlantUML)**
 - Use cases — [`docs/uml/use-cases.md`](./docs/uml/use-cases.md)
+- Conceptual class diagram — [`docs/uml/class-diagram.md`](./docs/uml/class-diagram.md)
+- Boundary / control / entity objects — [`docs/uml/analysis-objects.md`](./docs/uml/analysis-objects.md)
 - Sequence — clock-in — [`docs/uml/seq-clock-in.md`](./docs/uml/seq-clock-in.md)
 - Sequence — shift swap request — [`docs/uml/seq-swap-request.md`](./docs/uml/seq-swap-request.md)
+- State — shift — [`docs/uml/state-shift.md`](./docs/uml/state-shift.md)
+- State — swap request — [`docs/uml/state-swap-request.md`](./docs/uml/state-swap-request.md)
+- Activity — work a shift — [`docs/uml/activity-shift.md`](./docs/uml/activity-shift.md)
+- Activity — generate weekly schedule — [`docs/uml/activity-scheduling.md`](./docs/uml/activity-scheduling.md)
 
-**State**
-- Shift (clock-in → clock-out) — [`docs/uml/state-shift.md`](./docs/uml/state-shift.md)
-- Swap request — [`docs/uml/state-swap-request.md`](./docs/uml/state-swap-request.md)
-
-**Activity**
-- Shift lifecycle — [`docs/uml/activity-shift.md`](./docs/uml/activity-shift.md)
-- Schedule generator pipeline — [`docs/uml/activity-scheduling.md`](./docs/uml/activity-scheduling.md)
+**Design (Mermaid)**
+- Architecture — [`docs/uml/architecture.md`](./docs/uml/architecture.md)
+- Deployment — [`docs/uml/deployment.md`](./docs/uml/deployment.md)
+- ER diagram — [`docs/uml/er-diagram.md`](./docs/uml/er-diagram.md)
+- Full schema (columns + constraints + indexes) — [`docs/uml/schema.md`](./docs/uml/schema.md)
 
 ## 5. Repository Layout
 
