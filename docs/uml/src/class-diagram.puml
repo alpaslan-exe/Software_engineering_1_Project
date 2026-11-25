@@ -1,0 +1,219 @@
+@startuml class-diagram
+skinparam defaultFontName Inter
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor #7FCDF5
+  BorderColor #1A1A1A
+  ArrowColor #1A1A1A
+  FontSize 14
+  FontStyle bold
+  AttributeFontSize 12
+  StereotypeFontSize 11
+}
+skinparam class<<control>> {
+  BackgroundColor #FFD966
+}
+skinparam class<<boundary>> {
+  BackgroundColor #C9E7B3
+}
+hide circle
+hide empty members
+skinparam nodesep 45
+skinparam ranksep 55
+
+' ===== New: boundary and control classes for clock-in / clock-out =====
+class ClockKioskUI <<boundary>> {
+  +tapBadge(badgeID)
+  +showWelcome(firstName, minutesLate)
+  +showClockOut(firstName, duration)
+  +showError(message)
+}
+
+class ClockController <<control>> {
+  +handleBadgeTap(badgeID, stationID)
+  -clockIn(worker, stationID)
+  -clockOut(worker, openShift)
+  -computeMinutesLate()
+}
+
+class LiveRosterUI <<boundary>> {
+  +addToRoster(workerID, firstName, stationID, time)
+  +removeFromRoster(workerID)
+}
+
+' ===== Entity classes (from the original diagram) =====
+class Employee {
+  -username
+  -passwordHash
+  -role
+  +setUsername()
+  +setPassword()
+  +getUsername()
+  +getPassword()
+  +login()
+  +logout()
+  +verifyLoginInfo()
+}
+
+class Worker {
+  -firstName
+  -lastName
+  -isActive
+  -badgeID
+  -email
+  -wHrsCap
+  +setFirstName()
+  +setLastName()
+  +setID()
+  +setWeekHrs()
+  +{static} findActiveByBadge(badgeID)
+}
+
+class Availability {
+  -weekDay
+  -startTime
+  -endTime
+  -preference
+  +setAvailability()
+  +sendAvailability()
+}
+
+class "Time-off Request" as TimeOffRequest {
+  -startDate
+  -endDate
+  -reason
+  -state
+  +sendRequest()
+  +cancelRequest()
+  +requestState()
+  +setDates()
+}
+
+class Station {
+  -name
+  -zone
+  -code
+  +checkID()
+  +showDuration()
+}
+
+class Shift {
+  -clockIn
+  -clockOut
+  -closeReason
+  -flag
+  +Shift(workerID, stationID, clockIn, scheduledShiftID)
+  +isOpen()
+  +printReason()
+  +setClockInTime()
+  +setClockOutTime()
+  +{static} findOpenShift(workerID)
+  +close(time)
+  +setFlag(status)
+}
+
+class ScheduledShift {
+  -startDate
+  -endDate
+  -state
+  +scheduleState()
+  +viewSchedule()
+  +viewList()
+  +setDates()
+  +{static} findMatching(workerID, stationID, time)
+  +getTimes()
+}
+
+class TimeSheet {
+  -perShift
+  -state
+  -duration
+  -flags
+  +viewTimeSheet()
+  +printTimeSheet()
+}
+
+class LiveRoster {
+  -worker
+  -station
+  -elapsedTime
+  +printWorkerList()
+  +displayWorkerCount()
+}
+
+class SwapRequest {
+  -createdAt
+  -decidedAt
+  -state
+  +requestSwap()
+  +verifyRequest()
+  +approveRequest()
+}
+
+class DemandTemplate {
+  -name
+  -effectiveFrom
+  -effectiveTo
+  +createTemplate()
+  +editTemplate()
+  +printSlotList()
+}
+
+class DemandSlot {
+  -weekDay
+  -startTime
+  -endTime
+  -headCount
+  +stateStation()
+  +setWeekDay()
+  +setStartTime()
+  +setEndTime()
+  +stateHeadCount()
+}
+
+class ScheduleRun {
+  -weekStart
+  -coverage%
+  -inputHash
+  -unfilledCount
+  -state
+  +createSchedule()
+  +printSchedule()
+  +workerState()
+}
+
+' ===== Clock-in / clock-out collaboration (matches sequence diagrams 7.1, 7.2) =====
+ClockKioskUI ..> ClockController : calls
+ClockController ..> Worker : looks up
+ClockController ..> Shift : creates / closes
+ClockController ..> ScheduledShift : matches
+ClockController ..> LiveRosterUI : updates
+LiveRosterUI ..> LiveRoster : displays
+
+' ===== Associations (original) =====
+Employee "1" -- "1" Worker
+Worker "1" -- "0..*" Availability
+Worker "1" -- "0..*" TimeOffRequest
+Station "1" -- "0..*" Shift
+Station "1" -- "0..*" DemandSlot
+DemandTemplate "1" *-- "0..*" DemandSlot
+DemandTemplate "1" o-- "1" ScheduleRun
+
+' ===== Fix 5: SwapRequest connected (data dictionary) =====
+SwapRequest "0..*" -- "2" ScheduledShift : refers to
+Worker "1" -- "0..*" SwapRequest : requester
+Worker "1" -- "0..*" SwapRequest : counterpart
+Employee "0..1" -- "0..*" SwapRequest : approves
+
+' ===== Fixed: these were drawn as inheritance from Shift =====
+Worker "1" -- "0..*" Shift : works
+Shift "0..*" -- "0..1" ScheduledShift : realizes
+TimeSheet "1" o-- "0..*" Shift : summarizes
+LiveRoster "1" o-- "0..*" Shift : open shifts
+
+legend right
+  <b>Colour key</b>
+  <back:#C9E7B3>  boundary  </back>   <back:#FFD966>  control  </back>   <back:#7FCDF5>  entity  </back>
+endlegend
+@enduml
