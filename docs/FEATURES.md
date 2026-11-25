@@ -14,7 +14,7 @@ Status column: `☐` not started, `◐` in progress, `☑` done.
 
 | # | Feature | Milestone | Status |
 |---|---|---|---|
-| 1.1 | Badge-tap clock-in from kiosk (station-scoped) | MVP | ☐ |
+| 1.1 | Badge tap at kiosk: one tap clocks in, or clocks out if the worker has an open shift (station-scoped, FR-2.1.2) | MVP | ☐ |
 | 1.2 | Clock-out with duration summary | MVP | ☐ |
 | 1.3 | Prevent double clock-in (partial unique index) | MVP | ☐ |
 | 1.4 | Supervisor-forced clock-out | MVP | ☐ |
@@ -23,7 +23,7 @@ Status column: `☐` not started, `◐` in progress, `☑` done.
 | 1.7 | Mid-shift station reassignment (close + open) | v1 | ☐ |
 | 1.8 | Overtime flag on shifts > 8 h | v1 | ☐ |
 | 1.9 | Audit stream in `shift_events` | v1 | ☐ |
-| 1.10 | Break tracking (sub-interval inside a shift) | v2 | ☐ |
+| 1.10 | Break tracking (sub-interval inside a shift). Not in the Step 1–2 requirements or mockups; stretch only. | v2 | ☐ |
 
 ## 2. Worker-Facing Scheduling
 
@@ -36,9 +36,10 @@ Each worker sees **their own** schedule, picks up open shifts, requests swaps, a
 | 2.3 | Swap request → counterpart approval → supervisor approval | MVP | ☐ |
 | 2.4 | Mobile-friendly layout | MVP | ☐ |
 | 2.5 | Time-off request with reason | v1 | ☐ |
-| 2.6 | Availability window per worker (preferred days/hours) | v1 | ☐ |
+| 2.6 | Availability window per worker (preferred days/hours); required input for the generator (FR-3.6, FR-5.3.1) | MVP | ☐ |
 | 2.7 | ICS calendar export of own shifts | v1 | ☐ |
 | 2.8 | Shift reminder push 24 h / 1 h before | v2 | ☐ |
+| 2.9 | Worker Home landing page: today's shift, weekly stats, pending requests (IR-1.13) | MVP | ☐ |
 
 ## 3. Manager Schedule Generator
 
@@ -77,7 +78,7 @@ Auto-builds a weekly schedule from a demand template and worker availability, th
 | 5.1 | Session login (bcrypt + cookie) | MVP | ☐ |
 | 5.2 | Three roles enforced in middleware (manager / supervisor / worker) | MVP | ☐ |
 | 5.3 | User admin page (create / disable, assign worker row) | MVP | ☐ |
-| 5.4 | Password reset by admin | v1 | ☐ |
+| 5.4 | Password reset by a Manager | v1 | ☐ |
 | 5.5 | Audit log viewer | v1 | ☐ |
 | 5.6 | 2FA (TOTP) for manager role | v2 | ☐ |
 | 5.7 | SSO (Google / Microsoft) | v2 | ☐ |
@@ -107,7 +108,7 @@ Auto-builds a weekly schedule from a demand template and worker availability, th
 ## Milestone groupings
 
 **MVP (course deliverable)**
-Clock-in/out 1.1–1.5; Worker scheduling 2.1–2.4; Manager generator 3.1–3.5; Dashboard 4.1–4.4; Auth 5.1–5.3; Realtime 6.1–6.2; Platform 7.1–7.4.
+Clock-in/out 1.1–1.5; Worker scheduling 2.1–2.4, 2.6, 2.9; Manager generator 3.1–3.5; Dashboard 4.1–4.4; Auth 5.1–5.3; Realtime 6.1–6.2; Platform 7.1–7.4.
 
 **v1 (polish)** — everything tagged v1 above.
 **v2 (stretch)** — everything tagged v2 above.

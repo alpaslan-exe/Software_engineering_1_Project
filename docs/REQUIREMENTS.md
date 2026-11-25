@@ -9,7 +9,7 @@ CIS 375 Software Engineering I, Fall 2026 — Project Step 1: Requirements Elici
 - Each functional requirement names who performs it, what the system does, the input, and the output.
 - **Priority** follows the milestones in [`FEATURES.md`](./FEATURES.md): **MVP** (course deliverable, demonstrated end-to-end), **v1** (polish), **v2** (stretch).
 - **Trace** links each requirement to its use case in [`uml/use-cases.md`](./uml/use-cases.md) (UC-xx) and its feature number in `FEATURES.md` (F x.y).
-- **TBD** marks a value the team has not confirmed with the client. TBD values are not guessed.
+- This file mirrors the Step 1–2 report (final, consistency-checked version, Nov 2026). The report is the master copy: change both together.
 
 ---
 
@@ -55,7 +55,7 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 | FR-1.1 | The system shall allow an Employee to log in by entering a username and password. | MVP | UC-01, F 5.1 |
 | FR-1.1.1 | If the username and password match an active account, the system shall start a session and display the home screen for that account's role. | MVP | UC-01, F 5.1 |
 | FR-1.1.2 | If the username or password does not match, the system shall display "Invalid username or password" and shall not start a session. | MVP | UC-01, F 5.1 |
-| FR-1.2 | The system shall allow a logged-in Employee to log out. On log-out the system shall end the session and display the log-in screen. | MVP | UC-01, F 5.1 |
+| FR-1.2 | The system shall allow a logged-in Employee to log out. On log-out, the system shall end the session and display the log-in screen. | MVP | UC-01, F 5.1 |
 | FR-1.3 | The system shall assign each account exactly one role: Manager, Supervisor, or Worker. | MVP | UC-01, F 5.2 |
 | FR-1.4 | The system shall deny any request for a function not permitted to the requester's role and shall display "Not authorized". | MVP | F 5.2 |
 | FR-1.5 | The system shall allow a Manager to create an account by entering a username, initial password, and role. | MVP | UC-22, F 5.3 |
@@ -69,7 +69,7 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 |---|---|---|---|
 | FR-2.1 | The system shall allow a Worker to clock in by tapping a badge at a station kiosk. Input: badge ID and station ID. | MVP | UC-02, F 1.1 |
 | FR-2.1.1 | If the badge ID does not match an active worker, the system shall display "Unknown badge" and shall not record a shift. | MVP | UC-04, F 1.1 |
-| FR-2.1.2 | If the worker already has an open shift, the system shall display "Already clocked in" with that shift's station and shall not record a new shift. | MVP | UC-02, F 1.3 |
+| FR-2.1.2 | When a valid badge is tapped, the system shall clock the worker out (FR-2.2) if they have an open shift, and clock them in otherwise. | MVP | UC-02, UC-03, F 1.1, F 1.2, F 1.3 |
 | FR-2.1.3 | On a valid clock-in, the system shall record an open shift containing the worker, the station, and the clock-in date and time. | MVP | UC-02, F 1.1 |
 | FR-2.1.4 | On a valid clock-in, the system shall link the shift to the worker's scheduled shift at that station whose time window contains the clock-in time. | MVP | UC-02, F 1.5 |
 | FR-2.1.5 | If no scheduled shift matches, the system shall record the shift as a walk-in. | MVP | UC-05, F 1.5 |
@@ -77,8 +77,9 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 | FR-2.2 | The system shall allow a Worker to clock out by tapping their badge at a kiosk while they have an open shift. | MVP | UC-03, F 1.2 |
 | FR-2.2.1 | On clock-out, the system shall record the clock-out date and time on the open shift. | MVP | UC-03, F 1.2 |
 | FR-2.2.2 | On clock-out, the kiosk shall display the shift duration in hours and minutes. | MVP | UC-03, F 1.2 |
+| FR-2.2.3 | *Removed. Covered by FR-2.1.2.* | MVP | — |
 | FR-2.3 | The system shall allow a Supervisor to force a clock-out of a worker's open shift. Input: the shift and a reason. Output: the shift is closed with the current time and the reason. | MVP | UC-15, F 1.4 |
-| FR-2.4 | The system shall flag a linked shift as late, early, or missed by comparing its clock-in and clock-out times with the scheduled shift. The tolerance in minutes is TBD. | MVP | UC-02, F 1.5 |
+| FR-2.4 | The system shall flag a linked shift as late, early, or missed by comparing its clock-in and clock-out times with the scheduled shift. A clock-in more than 5 minutes after the scheduled start is late, a clock-out more than 5 minutes before the scheduled end is early, and a scheduled shift with no clock-in is missed. | MVP | UC-02, F 1.5 |
 | FR-2.5 | Once per night, the system shall close every shift that has been open for more than 16 hours, set its clock-out to its clock-in plus 8 hours, and mark it "auto_closed" for payroll review. | v1 | F 1.6 |
 | FR-2.6 | The system shall allow a Supervisor to reassign a worker with an open shift to another station. The system shall close the current shift and open a new shift at the new station with the same time. | v1 | F 1.7 |
 | FR-2.7 | The system shall flag every closed shift whose duration exceeds 8 hours as overtime. | v1 | F 1.8 |
@@ -108,7 +109,7 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 | FR-4.1.3 | On a valid request, the system shall notify the counterpart. | MVP | UC-08, F 2.3 |
 | FR-4.2 | The system shall allow the counterpart to accept or decline the request. | MVP | UC-09, F 2.3 |
 | FR-4.2.1 | On decline, the system shall notify the requester and shall leave both shifts unchanged. | MVP | UC-09, F 2.3 |
-| FR-4.2.2 | On accept, the system shall add the request to the Supervisor approval queue. | MVP | UC-09, F 2.3 |
+| FR-4.2.2 | On acceptance, the system shall add the request to the Supervisor approval queue. | MVP | UC-09, F 2.3 |
 | FR-4.3 | The system shall allow a Supervisor to approve or deny an accepted request. | MVP | UC-10, F 2.3 |
 | FR-4.3.1 | The system shall deny the request if either worker would exceed their weekly hour cap after the swap. | MVP | UC-10, F 3.2 |
 | FR-4.3.2 | On approval, the system shall reassign both shifts in a single operation and shall notify both workers. | MVP | UC-10, F 2.3 |
@@ -131,7 +132,7 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 | FR-5.4 | The system shall allow a Manager to reassign a shift in the draft by dragging it to another worker, and shall recompute coverage after each change. | MVP | UC-18, F 3.5 |
 | FR-5.5 | The system shall allow a Manager to publish a draft. On publish, the system shall lock the schedule run and email every worker who has a shift in it. | MVP | UC-19, F 3.4 |
 | FR-5.6 | Generating twice from identical inputs shall produce identical schedules. | v1 | UC-17, F 3.10 |
-| FR-5.7 | The system shall display a coverage heat-map of the draft by station and hour, marking under-staffed hours. | v1 | UC-17, F 3.8 |
+| FR-5.7 | The system shall display a coverage heat-map of the draft by station and hour, marking understaffed hours. | v1 | UC-17, F 3.8 |
 
 ### FR-6 Roster and Reporting
 
@@ -151,16 +152,16 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 |---|---|---|---|---|
 | NFR-1.1 | Usability | Every worker screen must be usable without horizontal scrolling on a display 360 pixels wide. | MVP | F 2.4 |
 | NFR-1.2 | Usability | A worker must complete a clock-in in no more than one badge tap and no keyboard input. | MVP | F 1.1 |
-| NFR-1.3 | Usability | 80% of first-time workers must find and claim an open shift within 2 minutes without help. (Target TBD with client.) | MVP | F 2.2 |
-| NFR-2.1 | Performance | The kiosk must display the clock-in or clock-out confirmation within 2 seconds of the badge tap. (TBD with client.) | MVP | F 1.1 |
-| NFR-2.2 | Performance | A clock-in or clock-out must appear on every open live-roster screen within 2 seconds, without a page reload. (TBD with client.) | MVP | F 4.1, F 6.1 |
-| NFR-2.3 | Performance | Draft generation for 50 workers and one week must finish within 10 seconds. (TBD with client.) | MVP | F 3.3 |
+| NFR-1.3 | Usability | 80% of first-time workers must find and claim an open shift within 2 minutes without help. | MVP | F 2.2 |
+| NFR-2.1 | Performance | The kiosk must display the clock-in or clock-out confirmation within 2 seconds of the badge tap. | MVP | F 1.1 |
+| NFR-2.2 | Performance | A clock-in or clock-out must appear on every open live-roster screen within 2 seconds, without a page reload. | MVP | F 4.1, F 6.1 |
+| NFR-2.3 | Performance | Draft generation for 50 workers and one week must finish within 10 seconds. | MVP | F 3.3 |
 | NFR-3.1 | Reliability | At no time must a worker have more than one open shift. | MVP | F 1.3 |
 | NFR-3.2 | Reliability | A swap approval must either reassign both shifts or neither. | MVP | F 2.3 |
 | NFR-3.3 | Reliability | A published schedule shift must not be edited in place; a change must create a new shift that supersedes the old one. | v1 | F 3.9 |
 | NFR-4.1 | Security | Passwords must be stored only as salted one-way hashes. | MVP | F 5.1 |
 | NFR-4.2 | Security | All browser–server traffic must be encrypted with TLS in production. | MVP | — |
-| NFR-4.3 | Security | A session must expire after a period of inactivity (duration TBD). | MVP | F 5.1 |
+| NFR-4.3 | Security | A session must expire after 30 minutes of inactivity. | MVP | F 5.1 |
 | NFR-4.4 | Security | The database must not be reachable from the public internet. | MVP | — |
 | NFR-5.1 | Supportability | The full development stack must start with a single `docker compose up` command. | MVP | F 7.1 |
 | NFR-5.2 | Supportability | Every push to `main` must run lint and automated tests in CI. | MVP | F 7.3 |
@@ -182,15 +183,21 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 | IR-1.6 | Schedule Builder | Manager | Demand template editor, draft preview, coverage, drag-to-reassign, Publish (FR-5) |
 | IR-1.7 | Live Roster | Supervisor, Manager | On-floor list and daily counts (FR-6.1, FR-6.2) |
 | IR-1.8 | Timesheets | Supervisor, Manager | Timesheet view and CSV export (FR-6.3, FR-6.4) |
-| IR-1.9 | User Admin | Manager | Account list with create, disable, link, and reset actions (FR-1.5 – FR-1.8) |
+| IR-1.9 | User Admin | Manager | Account list with create, disable, link, and reset actions, and weekly hour caps (FR-1.5 – FR-1.8, FR-5.2) |
+| IR-1.10 | Log In | All employees | Username and password fields and error message (FR-1.1, FR-1.2) |
+| IR-1.11 | Availability | Worker | Weekly availability windows with preference (FR-3.6) |
+| IR-1.12 | Time Off | Worker | Time-off request form and the worker's requests with status (FR-3.4) |
+| IR-1.13 | Worker Home | Worker | Landing screen after log-in: today's shift and links to My Schedule, Open Shifts, Swap Inbox, Time Off and Availability (FR-1.1.1) |
+
+The Supervisor's home screen is the Supervisor Queue (IR-1.5) and the Manager's is the Schedule Builder (IR-1.6). Mockups: [`MOCKUPS.md`](./MOCKUPS.md).
 
 ### 4.2 Hardware Interfaces
 
-- IR-2.1 Each kiosk will provide a badge reader that delivers the badge ID to the browser as keyboard input. The reader model is TBD.
+- IR-2.1 Each kiosk will provide a USB badge reader in keyboard-emulation mode that delivers the badge ID followed by Enter to the browser. Any reader supporting this mode is acceptable; the specific model is chosen at deployment.
 
 ### 4.3 Software Interfaces
 
-- IR-3.1 The system shall send schedule notifications through an SMTP email service (provider TBD).
+- IR-3.1 The system shall send schedule notifications through an SMTP email service. Development uses a local test mail server in the Docker Compose stack; the production provider is configured at deployment.
 - IR-3.2 The timesheet export shall be a comma-separated file with a header row, readable by common spreadsheet software.
 - IR-3.3 The ICS export shall follow RFC 5545 (v1).
 
@@ -201,7 +208,7 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 | Term | Description | Attributes | Relationships |
 |---|---|---|---|
 | Employee | Any person with a ShiftDeck account. | username, role | Is a Worker, Supervisor, or Manager. |
-| Worker | Employee who clocks in and works shifts. | first name, last name, badge ID, active, weekly hour cap | Has 0..* Shifts, Scheduled Shifts, Availability windows, Time-Off Requests. |
+| Worker | Employee who clocks in and works shifts. | first name, last name, email, badge ID, active, weekly hour cap | Has 0..* Shifts, Scheduled Shifts, Availability windows, Time-Off Requests. |
 | Supervisor | Employee who approves swaps and time-off and forces clock-outs. | (account attributes) | Decides Swap Requests and Time-Off Requests. |
 | Manager | Employee who builds schedules, manages accounts, and exports timesheets. | (account attributes) | Owns Demand Templates and Schedule Runs. |
 | Badge | Physical card identifying one worker at a kiosk. | badge ID (unique) | Belongs to exactly one Worker. |

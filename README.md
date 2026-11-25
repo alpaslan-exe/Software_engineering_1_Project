@@ -7,7 +7,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Socket.IO](https://img.shields.io/badge/Socket.IO-4-010101?logo=socket.io&logoColor=white)](https://socket.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#11-license)
 
 ---
 
@@ -48,11 +48,18 @@ The original pitch was broader (maintenance + machinery + live feeds); after rev
 └──────────────────┘                               └────────────────────┘
 ```
 
-The use case diagram lives in [`docs/uml/`](./docs/uml). Full feature matrix in [`docs/FEATURES.md`](./docs/FEATURES.md). Requirements specification in [`docs/REQUIREMENTS.md`](./docs/REQUIREMENTS.md).
+Requirements specification in [`docs/REQUIREMENTS.md`](./docs/REQUIREMENTS.md). Full feature matrix in [`docs/FEATURES.md`](./docs/FEATURES.md). UI mockups in [`docs/MOCKUPS.md`](./docs/MOCKUPS.md). Requirement → design → code → test tracking in [`docs/TRACEABILITY.md`](./docs/TRACEABILITY.md).
+
+> **Source of truth.** The Step 1–2 report is the master copy of the requirements and design. Everything in `docs/` mirrors it. If you change a requirement or diagram, change the report and the repo together in the same pull request.
 
 ## 4. UML
 
-- Use case diagram — [`docs/uml/use-cases.md`](./docs/uml/use-cases.md)
+All diagrams, with sources and re-render instructions: [`docs/uml/`](./docs/uml).
+
+- Use case diagram + descriptions (UC-01 … UC-23) — [`docs/uml/use-cases.md`](./docs/uml/use-cases.md)
+- Sequence diagrams — [clock in](./docs/uml/img/sequence-clock-in.svg), [clock out](./docs/uml/img/sequence-clock-out.svg)
+- Class diagram — [`docs/uml/img/class-diagram.svg`](./docs/uml/img/class-diagram.svg)
+- Dialog maps — [kiosk](./docs/uml/img/dialog-map-kiosk.svg), [web application](./docs/uml/img/dialog-map-web.svg)
 
 ## 5. Repository Layout
 
@@ -70,17 +77,23 @@ The use case diagram lives in [`docs/uml/`](./docs/uml). Full feature matrix in 
 │   │   └── migrations/
 │   ├── web/            # React SPA (worker + manager views)
 │   │   └── src/
-│   │       ├── pages/          # ClockKiosk, MySchedule, OpenShifts,
-│   │       │                   #   SwapInbox, ScheduleBuilder, Roster
+│   │       ├── pages/          # one page per screen in REQUIREMENTS §4.1:
+│   │       │                   #   ClockKiosk, LogIn, WorkerHome, MySchedule,
+│   │       │                   #   OpenShifts, SwapInbox, TimeOff, Availability,
+│   │       │                   #   SupervisorQueue, ScheduleBuilder, LiveRoster,
+│   │       │                   #   Timesheets, UserAdmin
 │   │       ├── components/
 │   │       ├── hooks/          # useSocketRoom, useAuth, …
 │   │       └── api/            # typed client wrappers
 │   └── simulator/      # synthetic clock events for the demo
 ├── docs/
+│   ├── REQUIREMENTS.md
 │   ├── FEATURES.md
-│   └── uml/
-├── docker-compose.yml
-├── package.json        # workspace root
+│   ├── MOCKUPS.md       # + mockups/ (screen images)
+│   ├── TRACEABILITY.md
+│   └── uml/             # src/ (diagram sources) + img/ (SVG, PNG)
+├── docker-compose.yml   # (added in the project setup PR)
+├── package.json         # workspace root (added in the project setup PR)
 └── README.md
 ```
 
@@ -89,7 +102,7 @@ The use case diagram lives in [`docs/uml/`](./docs/uml). Full feature matrix in 
 | Table | Purpose |
 |---|---|
 | `users` | account record; `role` ∈ {manager, supervisor, worker} |
-| `workers` | HR-side worker row; FK → `users` for ones that log in |
+| `workers` | HR-side worker row (name, email, badge ID, active, weekly hour cap); FK → `users` for ones that log in |
 | `stations` | physical location / department / station the worker is punching into |
 | `shifts` | **actual** clock-in/clock-out rows (one per punch pair) |
 | `demand_templates` + `demand_slots` | manager-authored demand (station × day-of-week × hour → head-count) |
@@ -109,8 +122,8 @@ The use case diagram lives in [`docs/uml/`](./docs/uml). Full feature matrix in 
 | `POST` | `/auth/logout` | |
 | `GET`  | `/me` | current user + role |
 | `GET`  | `/workers` / `/workers/:id` | roster |
-| `POST` | `/shifts/clock-in` | body: `{ badgeId, stationId }` |
-| `POST` | `/shifts/clock-out` | body: `{ shiftId }` |
+| `POST` | `/kiosk/badge-tap` | body: `{ badgeId, stationId }`. One endpoint for both directions (FR-2.1.2): clocks the worker **out** if they have an open shift, **in** otherwise. Returns `{ action: "clock_in" \| "clock_out", firstName, minutesLate?, duration? }`; unknown badge → `404` with `"Unknown badge"`. Implemented by `ClockController.handleBadgeTap()`. |
+| `POST` | `/shifts/:id/force-close` | supervisor only; body: `{ reason }` (FR-2.3) |
 | `GET`  | `/shifts?from&to&workerId=` | timesheet query |
 | `GET`  | `/me/schedule?weekStart=` | worker's own schedule for the week |
 | `GET`  | `/schedule/open-shifts` | open-shift marketplace |
@@ -136,6 +149,8 @@ The use case diagram lives in [`docs/uml/`](./docs/uml). Full feature matrix in 
 | `role:supervisor` | swaps + time-off requests pending supervisor approval | supervisor queue |
 
 ## 8. Running Locally
+
+> **Status:** the commands below are the target workflow. The files they need (`package.json`, `docker-compose.yml`, `.env.example`, CI config) are added in the project setup PR that follows this docs sync.
 
 ### Prerequisites
 Docker + Docker Compose, Node 20, pnpm.
@@ -180,4 +195,4 @@ CIS 375, Fall 2026 — University of Michigan–Dearborn.
 
 ## 11. License
 
-MIT. See [`LICENSE`](./LICENSE).
+MIT (the `LICENSE` file is added in the project setup PR).

@@ -1,0 +1,112 @@
+@startuml dialog-map-web
+skinparam defaultFontName Inter
+skinparam shadowing false
+skinparam state {
+  BackgroundColor #F2F2F2
+  BorderColor #333333
+  FontSize 14
+  AttributeFontSize 12
+  ArrowColor #333333
+  ArrowFontSize 12
+}
+hide empty description
+left to right direction
+skinparam nodesep 30
+skinparam ranksep 60
+
+state "Web Application" as WebApp {
+
+  [*] --> LogIn
+  state "Log In" as LogIn
+  LogIn : entry / clear fields
+  LogIn : submit [invalid or disabled]\n/ show "Invalid username or password"
+
+  state "Logged In" as LoggedIn {
+
+    state "Worker Home" as WorkerHome
+
+    state "My Schedule" as MySchedule
+    MySchedule : do / display(next 14 days)
+    MySchedule : download calendar / send ICS file (v1)
+    MySchedule : request swap(offered, wanted) [invalid]\n/ show reason
+
+    state "Open Shifts" as OpenShifts
+    OpenShifts : claim [no conflict and within cap]\n/ assign shift, remove from list
+    OpenShifts : claim [overlaps a shift] / show conflicting shift
+    OpenShifts : claim [over hour cap] / show hour cap
+
+    state "Swap Inbox" as SwapInbox
+    SwapInbox : accept / send to Supervisor Queue
+    SwapInbox : decline / notify requester
+    SwapInbox : cancel [not yet approved] / cancel request, notify
+    SwapInbox : shift changed / mark stale, notify both
+
+    state "Time Off" as TimeOff
+    TimeOff : submit [end >= start] / save pending request
+    TimeOff : submit [end < start] / show date error
+
+    state "Availability" as Availability
+    Availability : save(windows) / store availability
+
+    state "Supervisor Queue" as SupQueue
+    SupQueue : approve swap [both within cap]\n/ reassign both shifts, notify both
+    SupQueue : approve swap [over cap] / deny, notify both
+    SupQueue : deny swap / notify both
+    SupQueue : approve or deny time-off\n/ update request, notify worker
+
+    state "Schedule Builder" as Builder
+    Builder : save template [slots valid] / store template
+    Builder : save template [end <= start] / show slot error
+    Builder : generate(template, week) [inputs complete]\n/ show draft, coverage, unfilled slots
+    Builder : generate(template, week) [missing inputs]\n/ list missing inputs
+    Builder : drag shift(worker) / reassign, recompute coverage
+    Builder : publish / lock run, email workers
+
+    state "Live Roster" as Roster
+    Roster : do / update(on clock event)
+    Roster : force clock-out(shift, reason) [role = Supervisor]\n/ close shift with reason
+
+    state "Timesheets" as Timesheets
+    Timesheets : view(worker, dates) / show shifts and flags
+    Timesheets : export CSV(dates, workers) [role = Manager]\n/ download CSV
+
+    state "User Admin" as UserAdmin
+    UserAdmin : create(username, password, role) / add account
+    UserAdmin : disable(account) / block log-in
+    UserAdmin : link(account, worker) / save link
+    UserAdmin : reset password (v1) / set new password
+    UserAdmin : set hour cap(worker, hours) / save cap
+
+    WorkerHome --> MySchedule : select My Schedule
+    MySchedule --> WorkerHome : back
+    WorkerHome --> OpenShifts : select Open Shifts
+    OpenShifts --> WorkerHome : back
+    WorkerHome --> SwapInbox : select Swap Inbox
+    SwapInbox --> WorkerHome : back
+    MySchedule --> SwapInbox : request swap(offered, wanted) [valid]\n/ notify counterpart
+    WorkerHome --> TimeOff : select Time Off
+    TimeOff --> WorkerHome : back
+    WorkerHome --> Availability : select Availability
+    Availability --> WorkerHome : back
+
+    SupQueue --> Timesheets : select Timesheets
+    Timesheets --> SupQueue : back [role = Supervisor]
+    SupQueue --> Roster : select Live Roster
+    Roster --> SupQueue : back [role = Supervisor]
+
+    Builder --> Timesheets : select Timesheets
+    Timesheets --> Builder : back [role = Manager]
+    Builder --> Roster : select Live Roster
+    Roster --> Builder : back [role = Manager]
+    Builder --> UserAdmin : select User Admin
+    UserAdmin --> Builder : back
+  }
+
+  LogIn --> WorkerHome : submit [valid and role = Worker]
+  LogIn --> SupQueue : submit [valid and role = Supervisor]
+  LogIn --> Builder : submit [valid and role = Manager]
+
+  LoggedIn --> LogIn : log out / end session
+  LoggedIn --> LogIn : after(30 min idle) / end session
+}
+@enduml
