@@ -1,0 +1,30 @@
+@startuml dialog-map-kiosk
+skinparam defaultFontName Inter
+skinparam shadowing false
+skinparam state {
+  BackgroundColor #F2F2F2
+  BorderColor #333333
+  FontSize 15
+  AttributeFontSize 14
+  ArrowColor #333333
+  ArrowFontSize 14
+}
+state "Clock Kiosk" as Kiosk {
+  [*] --> Prompt
+  state "Badge Prompt" as Prompt
+  Prompt : entry / clear message
+  state "Welcome Message" as Welcome
+  Welcome : do / display(firstName, minutesLate)
+  state "Shift Length Message" as Length
+  Length : do / display(firstName, duration)
+  state "Error Message" as Err
+  Err : do / display(error)
+
+  Prompt --> Welcome : tapBadge(badgeID)\n[valid and not clocked in]
+  Welcome --> Prompt : after(5 s)
+  Prompt --> Length : tapBadge(badgeID)\n[valid and clocked in]
+  Length --> Prompt : after(5 s)
+  Prompt --> Err : tapBadge(badgeID)\n[unknown badge]
+  Err --> Prompt : after(5 s)
+}
+@enduml

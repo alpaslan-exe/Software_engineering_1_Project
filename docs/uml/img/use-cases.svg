@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1110" viewBox="0 0 1420 1110">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<defs><marker id="open" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#333" stroke-width="1.4"/></marker><marker id="tri" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="14" markerHeight="14" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#fff" stroke="#333" stroke-width="1.2"/></marker></defs>
+<line x1="115" y1="682" x2="232.0" y2="170.0" stroke="#333" stroke-width="1.2"/>
+<line x1="115" y1="682" x2="367.0" y2="365.0" stroke="#333" stroke-width="1.2"/>
+<line x1="115" y1="682" x2="345.0" y2="520.0" stroke="#333" stroke-width="1.2"/>
+<line x1="115" y1="682" x2="345.0" y2="590.0" stroke="#333" stroke-width="1.2"/>
+<line x1="115" y1="682" x2="345.0" y2="660.0" stroke="#333" stroke-width="1.2"/>
+<line x1="115" y1="682" x2="345.0" y2="730.0" stroke="#333" stroke-width="1.2"/>
+<line x1="115" y1="682" x2="345.0" y2="800.0" stroke="#333" stroke-width="1.2"/>
+<line x1="115" y1="682" x2="345.0" y2="870.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="207" x2="1122.0" y2="108.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="207" x2="1122.0" y2="168.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="207" x2="1122.0" y2="228.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="207" x2="1122.0" y2="288.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="207" x2="1122.0" y2="348.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="672" x2="1122.0" y2="288.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="672" x2="1122.0" y2="348.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="672" x2="1122.0" y2="408.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="672" x2="1174.0" y2="515.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="672" x2="1174.0" y2="595.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="672" x2="1174.0" y2="675.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="672" x2="1174.0" y2="755.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1290" y1="672" x2="1174.0" y2="835.0" stroke="#333" stroke-width="1.2"/>
+<line x1="1141.6" y1="850.5" x2="1345" y2="890" stroke="#333" stroke-width="1.2"/>
+<line x1="705" y1="1005" x2="705" y2="957" stroke="#333" stroke-width="1.2"/>
+<line x1="386.3" y1="188.0" x2="522.6" y2="231.6" stroke="#333" stroke-width="1.2" stroke-dasharray="6,5" marker-end="url(#open)"/>
+<line x1="486.5" y1="343.5" x2="558.5" y2="271.5" stroke="#333" stroke-width="1.2" stroke-dasharray="6,5" marker-end="url(#open)"/>
+<line x1="500.2" y1="122.9" x2="391.8" y2="152.9" stroke="#333" stroke-width="1.2" stroke-dasharray="6,5" marker-end="url(#open)"/>
+<line x1="898.4" y1="644.8" x2="992.5" y2="616.2" stroke="#333" stroke-width="1.2" stroke-dasharray="6,5" marker-end="url(#open)"/>
+<polyline points="95,720 95,1037 683,1037" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#tri)"/>
+<polyline points="1310,710 1310,1037 727,1037" fill="none" stroke="#333" stroke-width="1.2" marker-end="url(#tri)"/>
+<polyline points="1330,205 1395,205 1395,1037 1310,1037" fill="none" stroke="#333" stroke-width="1.2"/>
+<rect x="200" y="30" width="1010" height="945" rx="6" fill="none" stroke="#333" stroke-width="1.3"/>
+<text x="705.0" y="50" font-family="Inter, DejaVu Sans, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#111">ShiftDeck</text>
+<rect x="225" y="65" width="465" height="375" rx="6" fill="none" stroke="#333" stroke-width="1.3"/>
+<text x="457.5" y="85" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" font-weight="700" text-anchor="middle" fill="#111">Clocking</text>
+<rect x="725" y="65" width="460" height="375" rx="6" fill="none" stroke="#333" stroke-width="1.3"/>
+<text x="955.0" y="85" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" font-weight="700" text-anchor="middle" fill="#111">Supervision and monitoring</text>
+<rect x="225" y="465" width="465" height="430" rx="6" fill="none" stroke="#333" stroke-width="1.3"/>
+<text x="457.5" y="485" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" font-weight="700" text-anchor="middle" fill="#111">Worker self-service</text>
+<rect x="725" y="465" width="460" height="430" rx="6" fill="none" stroke="#333" stroke-width="1.3"/>
+<text x="955.0" y="485" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" font-weight="700" text-anchor="middle" fill="#111">Scheduling and admin</text>
+<ellipse cx="330" cy="170" rx="98" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="330" y="175.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-02 Clock In</text>
+<ellipse cx="465" cy="365" rx="98" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="465" y="370.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-03 Clock Out</text>
+<ellipse cx="565" cy="105" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="565" y="110.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-05 Record Walk-In</text>
+<ellipse cx="580" cy="250" rx="104" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="580" y="255.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-04 Verify Badge</text>
+<ellipse cx="457" cy="520" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="457" y="525.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-06 View My Schedule</text>
+<ellipse cx="457" cy="590" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="457" y="595.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-07 Claim Open Shift</text>
+<ellipse cx="457" cy="660" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="457" y="665.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-08 Request Shift Swap</text>
+<ellipse cx="457" cy="730" rx="112" ry="27" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="457" y="726.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-09 Respond to</text>
+<text x="457" y="743.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">Swap Request</text>
+<ellipse cx="457" cy="800" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="457" y="805.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-11 Request Time Off</text>
+<ellipse cx="457" cy="870" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="457" y="875.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-13 Set Availability</text>
+<ellipse cx="1010" cy="108" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1010" y="113.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-15 Force Clock-Out</text>
+<ellipse cx="1010" cy="168" rx="112" ry="27" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1010" y="164.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-10 Approve</text>
+<text x="1010" y="181.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">Swap Request</text>
+<ellipse cx="1010" cy="228" rx="112" ry="27" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1010" y="224.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-12 Decide Time-Off</text>
+<text x="1010" y="241.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">Request</text>
+<ellipse cx="1010" cy="288" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1010" y="293.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-14 View Live Roster</text>
+<ellipse cx="1010" cy="348" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1010" y="353.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-21 View Timesheet</text>
+<ellipse cx="1010" cy="408" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1010" y="413.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-20 Export Timesheet</text>
+<ellipse cx="1062" cy="515" rx="112" ry="27" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1062" y="511.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-16 Edit Demand</text>
+<text x="1062" y="528.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">Template</text>
+<ellipse cx="1062" cy="595" rx="112" ry="27" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1062" y="591.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-17 Generate Weekly</text>
+<text x="1062" y="608.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">Schedule</text>
+<ellipse cx="1062" cy="675" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1062" y="680.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-23 Set Hour Caps</text>
+<ellipse cx="1062" cy="755" rx="112" ry="27" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1062" y="751.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-22 Manage User</text>
+<text x="1062" y="768.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">Accounts</text>
+<ellipse cx="1062" cy="835" rx="112" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="1062" y="840.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-19 Publish Schedule</text>
+<ellipse cx="832" cy="665" rx="100" ry="27" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="832" y="661.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-18 Adjust Schedule</text>
+<text x="832" y="678.5" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">Draft</text>
+<ellipse cx="705" cy="935" rx="82" ry="22" fill="#F2F2F2" stroke="#333" stroke-width="1.2"/>
+<text x="705" y="940.0" font-family="Inter, DejaVu Sans, sans-serif" font-size="14" text-anchor="middle" fill="#111">UC-01 Log In</text>
+<circle cx="95" cy="660" r="9" fill="#F2F2F2" stroke="#333" stroke-width="1.3"/><path d="M95,669 L95,694 M80,679 L110,679 M95,694 L83,716 M95,694 L107,716" stroke="#333" stroke-width="1.3" fill="none"/><text x="95" y="736" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" text-anchor="middle" fill="#111">Worker</text>
+<circle cx="1310" cy="185" r="9" fill="#F2F2F2" stroke="#333" stroke-width="1.3"/><path d="M1310,194 L1310,219 M1295,204 L1325,204 M1310,219 L1298,241 M1310,219 L1322,241" stroke="#333" stroke-width="1.3" fill="none"/><text x="1310" y="261" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" text-anchor="middle" fill="#111">Supervisor</text>
+<circle cx="1310" cy="650" r="9" fill="#F2F2F2" stroke="#333" stroke-width="1.3"/><path d="M1310,659 L1310,684 M1295,669 L1325,669 M1310,684 L1298,706 M1310,684 L1322,706" stroke="#333" stroke-width="1.3" fill="none"/><text x="1310" y="726" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" text-anchor="middle" fill="#111">Manager</text>
+<circle cx="1365" cy="875" r="9" fill="#F2F2F2" stroke="#333" stroke-width="1.3"/><path d="M1365,884 L1365,909 M1350,894 L1380,894 M1365,909 L1353,931 M1365,909 L1377,931" stroke="#333" stroke-width="1.3" fill="none"/><text x="1365" y="951" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" text-anchor="middle" fill="#111">Email System</text>
+<circle cx="705" cy="1015" r="9" fill="#F2F2F2" stroke="#333" stroke-width="1.3"/><path d="M705,1024 L705,1049 M690,1034 L720,1034 M705,1049 L693,1071 M705,1049 L717,1071" stroke="#333" stroke-width="1.3" fill="none"/><text x="705" y="1091" font-family="Inter, DejaVu Sans, sans-serif" font-size="15" text-anchor="middle" fill="#111">Employee</text>
+<text x="454.46510026061276" y="199.8288320833961" font-family="Inter, DejaVu Sans, sans-serif" font-size="13" text-anchor="middle" fill="#111">&#171;include&#187;</text>
+<text x="554.471032038721" y="307.5289679612791" font-family="Inter, DejaVu Sans, sans-serif" font-size="13" text-anchor="middle" fill="#111">&#171;include&#187;</text>
+<text x="445.95416643410726" y="127.92757098631077" font-family="Inter, DejaVu Sans, sans-serif" font-size="13" text-anchor="middle" fill="#111">&#171;extend&#187;</text>
+<text x="905.4108575759066" y="624.4836520421154" font-family="Inter, DejaVu Sans, sans-serif" font-size="13" text-anchor="middle" fill="#111">&#171;extend&#187;</text>
+</svg>
