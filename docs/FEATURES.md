@@ -75,7 +75,7 @@ Auto-builds a weekly schedule from a demand template and worker availability, th
 
 | # | Feature | Milestone | Status |
 |---|---|---|---|
-| 5.1 | Session login (bcrypt + cookie) | MVP | ☐ |
+| 5.1 | Session login (salted password hash + cookie) | MVP | ☐ |
 | 5.2 | Three roles enforced in middleware (manager / supervisor / worker) | MVP | ☐ |
 | 5.3 | User admin page (create / disable, assign worker row) | MVP | ☐ |
 | 5.4 | Password reset by a Manager | v1 | ☐ |
@@ -87,7 +87,7 @@ Auto-builds a weekly schedule from a demand template and worker availability, th
 
 | # | Feature | Milestone | Status |
 |---|---|---|---|
-| 6.1 | Socket.IO rooms: `floor:global`, `station:*`, `schedule`, `user:<id>`, `role:supervisor` | MVP | ☐ |
+| 6.1 | Realtime channels: `floor:global`, `station:*`, `schedule`, `user:<id>`, `role:supervisor` | MVP | ☐ |
 | 6.2 | Room auth gating (role check on join) | MVP | ☐ |
 | 6.3 | Reconnect-with-replay (missed-events window) | v2 | ☐ |
 | 6.4 | Redis adapter for horizontal scale | v2 | ☐ |
@@ -100,7 +100,7 @@ Auto-builds a weekly schedule from a demand template and worker availability, th
 | 7.2 | Seed script for demo data | MVP | ☐ |
 | 7.3 | GitHub Actions CI (lint + test) | MVP | ☐ |
 | 7.4 | Simulator service for demo clock events | MVP | ☐ |
-| 7.5 | Pino → journald in prod | v1 | ☐ |
+| 7.5 | Structured logging in prod | v1 | ☐ |
 | 7.6 | Nightly DB backup to S3-compatible store | v2 | ☐ |
 
 ---

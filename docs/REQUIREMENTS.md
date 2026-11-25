@@ -41,7 +41,7 @@ Out of scope: payroll calculation, machinery and maintenance tracking (removed w
 - A2. Each kiosk is installed at exactly one station and knows its station ID.
 - A3. One organization uses one ShiftDeck installation. Multi-tenant use is out of scope.
 - C1. The system must run as a browser application; no software installation is required on worker devices.
-- C2. The system must use PostgreSQL 16 for persistent storage and Node.js 20 for the server (team technology decision).
+- C2. The system must use PostgreSQL 16 for persistent storage, Rust for the server and JavaScript for the web client (team technology decision).
 - C3. The demo simulator must be disabled in production.
 
 ---

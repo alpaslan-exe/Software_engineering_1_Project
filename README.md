@@ -3,10 +3,9 @@
 > **CIS 375 — Software Engineering I — Final Project**
 > A focused web app for employee time-tracking: workers punch in and out, see their own schedule, trade shifts, and request time-off; managers build the weekly schedule from a demand template and watch who is on the floor in real time.
 
-[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Rust](https://img.shields.io/badge/Backend-Rust-000000?logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![JavaScript](https://img.shields.io/badge/Frontend-JavaScript-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/docs/Web/JavaScript)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Socket.IO](https://img.shields.io/badge/Socket.IO-4-010101?logo=socket.io&logoColor=white)](https://socket.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#11-license)
 
 ---
@@ -25,22 +24,25 @@ The original pitch was broader (maintenance + machinery + live feeds); after rev
 
 | Layer | Tech |
 |---|---|
-| Frontend | React 18 + Vite, React Router, TanStack Query, Tailwind, `socket.io-client` |
-| Realtime | Socket.IO over WebSocket |
-| Backend | Node.js 20, Express, Zod validation, Pino logging |
-| Database | PostgreSQL 16, `pg` driver, migrations via `node-pg-migrate` |
-| Auth | Session cookies + bcrypt, role-based (manager / supervisor / worker) |
-| Simulator | Node worker that generates demo clock-in/out events |
-| Dev / CI | Docker Compose, GitHub Actions, ESLint + Prettier, Vitest + Supertest |
+| Backend | **Rust** (web framework chosen in the architecture phase) |
+| Frontend | **JavaScript** single-page app (framework chosen in the architecture phase) |
+| Realtime | WebSocket push from the API to open roster / queue screens (NFR-2.2) |
+| Database | **PostgreSQL 16** with versioned SQL migrations |
+| Auth | Session cookies, salted one-way password hashes (NFR-4.1), role-based (manager / supervisor / worker), 30-minute idle timeout (NFR-4.3) |
+| Email | SMTP; a local test mail server in Docker Compose for development (IR-3.1) |
+| Simulator | Dev-only tool that generates demo clock-in/out events (C3: disabled in production) |
+| Dev / CI | Docker Compose (NFR-5.1), GitHub Actions running lint + tests on every push (NFR-5.2) |
+
+Constraint C2 (REQUIREMENTS §1.4): Rust for the server, PostgreSQL 16 for storage. Library choices (web framework, database crate, frontend framework, test tools) are recorded here once the team decides them.
 
 ## 3. Architecture at a Glance
 
 ```
 ┌──────────────────┐     HTTPS/REST + WebSocket    ┌────────────────────┐
-│   React SPA      │ ────────────────────────────► │   Express API      │
-│  worker + mgr    │ ◄──── realtime events ─────── │  + Socket.IO hub   │
+│   Web client     │ ────────────────────────────► │   Rust API         │
+│   (JavaScript)   │ ◄──── realtime events ─────── │  + realtime hub    │
 └──────────────────┘                               └─────────┬──────────┘
-                                                             │ SQL (pg)
+                                                             │ SQL
                                                              │
 ┌──────────────────┐                               ┌─────────▼──────────┐
 │  Simulator       │ ─── POST /sim/clock events ─► │   PostgreSQL 16    │
@@ -66,16 +68,15 @@ All diagrams, with sources and re-render instructions: [`docs/uml/`](./docs/uml)
 ```
 .
 ├── apps/
-│   ├── api/            # Express + Socket.IO server
+│   ├── api/            # Rust API server (internal layout set in the architecture phase)
 │   │   ├── src/
-│   │   │   ├── routes/         # REST endpoints
-│   │   │   ├── realtime/       # Socket.IO rooms, broadcasters
-│   │   │   ├── domain/         # services (Shift, Schedule, Swap, TimeOff)
-│   │   │   ├── db/             # pg pool, repository classes
-│   │   │   ├── auth/           # sessions, RBAC middleware
-│   │   │   └── index.ts
+│   │   │   ├── routes/         # boundary: HTTP endpoints
+│   │   │   ├── realtime/       # boundary: WebSocket push
+│   │   │   ├── domain/         # control: ClockController, SwapController, …
+│   │   │   ├── db/             # entity: repositories for each table
+│   │   │   └── auth/           # sessions, role checks
 │   │   └── migrations/
-│   ├── web/            # React SPA (worker + manager views)
+│   ├── web/            # JavaScript SPA (worker + supervisor + manager views)
 │   │   └── src/
 │   │       ├── pages/          # one page per screen in REQUIREMENTS §4.1:
 │   │       │                   #   ClockKiosk, LogIn, WorkerHome, MySchedule,
@@ -83,8 +84,8 @@ All diagrams, with sources and re-render instructions: [`docs/uml/`](./docs/uml)
 │   │       │                   #   SupervisorQueue, ScheduleBuilder, LiveRoster,
 │   │       │                   #   Timesheets, UserAdmin
 │   │       ├── components/
-│   │       ├── hooks/          # useSocketRoom, useAuth, …
-│   │       └── api/            # typed client wrappers
+│   │       ├── hooks/
+│   │       └── api/            # client wrappers for the REST API
 │   └── simulator/      # synthetic clock events for the demo
 ├── docs/
 │   ├── REQUIREMENTS.md
@@ -93,7 +94,6 @@ All diagrams, with sources and re-render instructions: [`docs/uml/`](./docs/uml)
 │   ├── TRACEABILITY.md
 │   └── uml/             # src/ (diagram sources) + img/ (SVG, PNG)
 ├── docker-compose.yml   # (added in the project setup PR)
-├── package.json         # workspace root (added in the project setup PR)
 └── README.md
 ```
 
@@ -138,7 +138,7 @@ All diagrams, with sources and re-render instructions: [`docs/uml/`](./docs/uml)
 | `POST` | `/schedule/runs/:id/publish` | lock + notify |
 | `POST` | `/sim/tick` | **dev-only** simulator trigger |
 
-### Realtime channels (Socket.IO rooms)
+### Realtime channels
 
 | Room | Payload | Consumers |
 |---|---|---|
@@ -150,44 +150,19 @@ All diagrams, with sources and re-render instructions: [`docs/uml/`](./docs/uml)
 
 ## 8. Running Locally
 
-> **Status:** the commands below are the target workflow. The files they need (`package.json`, `docker-compose.yml`, `.env.example`, CI config) are added in the project setup PR that follows this docs sync.
+Set up in the project setup PR, after the architecture phase picks the frameworks. Target: one `docker compose up` starts the database, the API, the web client and a test mail server (NFR-5.1).
 
-### Prerequisites
-Docker + Docker Compose, Node 20, pnpm.
+Planned seed accounts (dev only; the seed step must refuse to run in production):
 
-### Boot everything
-```bash
-cp .env.example .env
-docker compose up -d db          # Postgres
-pnpm install
-pnpm --filter api migrate:up
-pnpm --filter api seed            # loads demo workers + a demand template
-pnpm dev                          # concurrently: api, web, simulator
-```
-
-Open:
-- Web UI — <http://localhost:5173>
-- API    — <http://localhost:4000>
-- Postgres — `localhost:5432` (user `shiftdeck` / db `shiftdeck`)
-
-### Default seed accounts
 | Role | Username | Password |
 |---|---|---|
 | Manager | `manager` | `manager` |
 | Supervisor | `super` | `super` |
 | Worker | `worker1` | `worker1` |
 
-(Dev-only; the seed script refuses to run with `NODE_ENV=production`.)
-
 ## 9. Testing
 
-```bash
-pnpm --filter api test            # unit + supertest integration
-pnpm --filter web test            # vitest + React Testing Library
-pnpm lint
-```
-
-CI runs the same three on every push to `main` and on pull requests.
+Backend tests run with `cargo test`; frontend tests with the test runner chosen for the web client. CI runs lint and all tests on every push to `main` and on pull requests (NFR-5.2). Step 3 test cases (equivalence classes, boundary values, basis paths) are tracked in [`docs/TRACEABILITY.md`](./docs/TRACEABILITY.md).
 
 ## 10. Team
 
